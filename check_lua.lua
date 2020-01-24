@@ -5,7 +5,7 @@
 --
 -- For CS F331 / CSCE A331 Spring 2020
 -- A Lua Program to Run
--- Used in Assignment 1, Exercise A
+-- Used in Assignment 1, Exercise 1
 
 
 -- A mysterious table
