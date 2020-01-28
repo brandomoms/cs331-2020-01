@@ -1,5 +1,6 @@
 #!/usr/bin/env lua
 -- runtime_error.lua
+-- VERSION 2
 -- Glenn G. Chappell
 -- 2020-01-27
 --
@@ -25,7 +26,8 @@ end
 
 -- Main program
 -- Check some values using function checkval
-io.write("Examples of Runtime Type Errors\n\n")
+io.write("Examples of Runtime Type Errors\n")
+io.write("See source code for details\n\n")
 
 val1 = 4
 checkval(val1)
@@ -36,11 +38,19 @@ checkval(val2)
 io.write("\n")
 
 val3 = "abc"  -- Not a number!
-checkval(val3)
+if pcall(checkval, val3) then  -- pcall: Protected CALL; catch exception
+    io.write("Value ("..val3..") was checked without errors\n")
+else
+    io.write("Checking value ("..val3..") caused a runtime error\n")
+end
 io.write("\n")
 
 val4 = -7
-checkval(val4)
+if pcall(checkval, val4) then  -- pcall: Protected CALL; catch exception
+    io.write("Value ("..val4..") was checked without errors\n")
+else
+    io.write("Checking value ("..val4..") caused a runtime error\n")
+end
 io.write("\n")
 
 val5 = "xyz"  -- Not a number!
