@@ -8,7 +8,7 @@
 
 
 io.write("This file contains sample code from January 29, 2020,\n")
-io.write("for the \"Lua: Fundamentals\" topic.\n")
+io.write("for the topic \"Lua: Fundamentals\".\n")
 io.write("It will execute, but it is not intended to do anything\n")
 io.write("useful. See the source.\n")
 
@@ -355,7 +355,7 @@ end
 
 io.write("\n")
 io.write("This file contains sample code from January 29, 2020,\n")
-io.write("for the \"Lua: Fundamentals\" topic.\n")
+io.write("for the topic \"Lua: Fundamentals\".\n")
 io.write("It will execute, but it is not intended to do anything\n")
 io.write("useful. See the source.\n")
 
