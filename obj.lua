@@ -5,6 +5,7 @@
 --
 -- For CS F331 / CSCE A331 Spring 2020
 -- Code from 1/31 - Lua: Objects
+-- Requires pets.lua
 
 
 io.write("This file contains sample code from January 31, 2020,\n")
