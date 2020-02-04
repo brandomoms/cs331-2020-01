@@ -1,7 +1,8 @@
 #!/usr/bin/env lua
 -- org.lua
 -- Glenn G. Chappell
--- 2020-01-31
+-- Started: 2020-01-31
+-- Updated: 2020-02-03
 --
 -- For CS F331 / CSCE A331 Spring 2020
 -- Code from 1/31 - Lua: Objects
@@ -115,8 +116,7 @@ fifi = pets.Dog.new()
 fifi:setBark("Yip! Yip! Yip!")
 
 -- Make yet another Dog and set its bark sound
-bruiser = pets.Dog.new()
-bruiser:setBark("RRRROWF!!!")
+bruiser = pets.Dog.new("RRRROWF!!!")
 
 io.write("\nRover barks:\n  ")
 rover:bark()
@@ -206,6 +206,30 @@ io.write("-7 times 100 is " .. times100(-7) .. "\n")
 -- parameter by some data member. We would set the data member to 2 or 3
 -- in a constructor to get the functionality shown above. So the
 -- existence of closures means we have less need for objects.
+
+-- Closure version of pets.Dog
+
+function make_dog(barkSound)
+    if barkSound == nil then
+        barkSound = "Ruff!"  -- Default value
+    end
+
+    -- The closure
+    function bark()
+        io.write(barkSound.."\n")
+    end
+
+    return bark
+end
+
+fido = make_dog()
+fluffy = make_dog("Yap!! Yap!!")
+
+io.write("\n")
+io.write("Fibo barks:\n  ")
+fido()
+io.write("Fluffy barks:\n  ")
+fluffy()
 
 
 io.write("\n")

@@ -21,7 +21,7 @@ local pets = {}  -- Our module
 -- of a C++ or Java class, with a constructor, a data member, and
 -- methods.
 -- EXPORTED
---
+
 -- The value for internal-use-only key _sound is the Dog's bark sound.
 -- The default value, set by the constructor is "Ruff!".
 
@@ -36,10 +36,13 @@ end
 -- Dog.new
 -- Make a new object of the "class" Dog, and return it.
 -- Like a C++ constructor.
-function pets.Dog.new()
-    local obj = {}        -- Our object
+function pets.Dog.new(barkSound)
+    if barkSound == nil then
+        barkSound = "Ruff!"  -- Default value
+    end
+    local obj = {}           -- Our object
     setmetatable(obj, pets.Dog)
-    obj._sound = "Ruff!"  -- Default value
+    obj._sound = barkSound
     return obj
 end
 
