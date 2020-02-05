@@ -1,6 +1,8 @@
 -- pets.lua
+-- VERSION 2
 -- Glenn G. Chappell
--- 2020-01-31
+-- Started: 2020-01-31
+-- Updated: 2020-02-03
 --
 -- For CS F331 / CSCE A331 Spring 2020
 -- Code from 1/31 - Lua Pets Module
