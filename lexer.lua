@@ -9,7 +9,8 @@
 
 -- History:
 --   v1. Framework written. Lexer treats every character as punctuation.
---   v2. Add state LETTER, with handler. Write skipWhitespace.
+--   v2. Add state LETTER, with handler. Write skipWhitespace. Add
+--       comment on invariants.
 
 -- Usage:
 --
