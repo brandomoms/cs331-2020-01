@@ -20,7 +20,7 @@
 --    for lexstr, cat in lexer.lex(program) do
 --        -- lexstr is the string form of a lexeme.
 --        -- cat is a number representing the lexeme category.
---        --  It can be used as an index for array lexer.catnames
+--        --  It can be used as an index for array lexer.catnames.
 --    end
 
 
@@ -109,6 +109,20 @@ local function isWhitespace(c)
 end
 
 
+-- isPrintableASCII
+-- Returns true if string c is a printable ASCII character (codes 32 " "
+-- through 126 "~"), false otherwise.
+local function isPrintableASCII(c)
+    if c:len() ~= 1 then
+        return false
+    elseif c >= " " and c <= "~" then
+        return true
+    else
+        return false
+    end
+end
+
+
 -- isIllegal
 -- Returns true if string c is an illegal character, false otherwise.
 local function isIllegal(c)
@@ -116,7 +130,7 @@ local function isIllegal(c)
         return false
     elseif isWhitespace(c) then
         return false
-    elseif c >= " " and c <= "~" then
+    elseif isPrintableASCII(c) then
         return false
     else
         return true
