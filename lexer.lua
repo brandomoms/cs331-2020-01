@@ -1,8 +1,8 @@
--- lexer.lua  UNFINISHED
--- VERSION 2
+-- lexer.lua
+-- VERSION 3
 -- Glenn G. Chappell
 -- Started: 2020-02-05
--- Updated: 2020-02-05
+-- Updated: 2020-02-07
 --
 -- For CS F331 / CSCE A331 Spring 2020
 -- In-Class Lexer Module
@@ -11,6 +11,8 @@
 --   v1. Framework written. Lexer treats every character as punctuation.
 --   v2. Add state LETTER, with handler. Write skipWhitespace. Add
 --       comment on invariants.
+--   v3. Finished (hopefully). Add states DIGIT, DIGDOT, DOT, PLUS,
+--       MINUS, STAR.
 
 -- Usage:
 --
@@ -151,6 +153,12 @@ function lexer.lex(program)
     local DONE   = 0
     local START  = 1
     local LETTER = 2
+    local DIGIT  = 3
+    local DIGDOT = 4
+    local DOT    = 5
+    local PLUS   = 6
+    local MINUS  = 7
+    local STAR   = 8
 
     -- ***** Character-Related Utility Functions *****
 
@@ -218,14 +226,32 @@ function lexer.lex(program)
     -- for state XYZ
 
     local function handle_DONE()
-        io.write("ERROR: 'DONE' state should not be handled\n")
-        assert(0)
+        error("'DONE' state should not be handled\n")
     end
 
     local function handle_START()
-        if isLetter(ch) or ch == "_" then
+        if isIllegal(ch) then
+            add1()
+            state = DONE
+            category = lexer.MAL
+        elseif isLetter(ch) or ch == "_" then
             add1()
             state = LETTER
+        elseif isDigit(ch) then
+            add1()
+            state = DIGIT
+        elseif ch == "." then
+            add1()
+            state = DOT
+        elseif ch == "+" then
+            add1()
+            state = PLUS
+        elseif ch == "-" then
+            add1()
+            state = MINUS
+        elseif ch == "*" or ch == "/" or ch == "=" then
+            add1()
+            state = STAR
         else
             add1()
             state = DONE
@@ -247,12 +273,106 @@ function lexer.lex(program)
         end
     end
 
+    local function handle_DIGIT()
+        if isDigit(ch) then
+            add1()
+        elseif ch == "." then
+            add1()
+            state = DIGDOT
+        else
+            state = DONE
+            category = lexer.NUMLIT
+        end
+    end
+
+    local function handle_DIGDOT()
+        if isDigit(ch) then
+            add1()
+        else
+            state = DONE
+            category = lexer.NUMLIT
+        end
+    end
+
+    local function handle_DOT()
+        if isDigit(ch) then
+            add1()
+            state = DIGDOT
+        else
+            state = DONE
+            category = lexer.OP
+        end
+    end
+
+    local function handle_PLUS()
+        if isDigit(ch) then
+            add1()
+            state = DIGIT
+        elseif ch == "+" or ch == "=" then
+            add1()
+            state = DONE
+            category = lexer.OP
+        elseif ch == "." then
+            if isDigit(nextChar()) then
+                add1()  -- add dot to lexeme
+                add1()  -- add digit to lexeme (OPTIONAL)
+                state = DIGDOT
+            else  -- lexeme is just "+"; do not add dot to lexeme
+                state = DONE
+                category = lexer.OP
+            end
+        else
+            state = DONE
+            category = lexer.OP
+        end
+    end
+
+    local function handle_MINUS()
+        if isDigit(ch) then
+            add1()
+            state = DIGIT
+        elseif ch == "-" or ch == "=" then
+            add1()
+            state = DONE
+            category = lexer.OP
+        elseif ch == "." then
+            if isDigit(nextChar()) then
+                add1()  -- add dot to lexeme
+                add1()  -- add digit to lexeme (OPTIONAL)
+                state = DIGDOT
+            else  -- lexeme is just "-"; do not add dot to lexeme
+                state = DONE
+                category = lexer.OP
+            end
+        else
+            state = DONE
+            category = lexer.OP
+        end
+    end
+
+    local function handle_STAR()  -- Handle * or / or =
+        if ch == "=" then
+            add1()
+            state = DONE
+            category = lexer.OP
+        else
+            state = DONE
+            category = lexer.OP
+        end
+    end
+
     -- ***** Table of State-Handler Functions *****
 
     handlers = {
         [DONE]=handle_DONE,
         [START]=handle_START,
         [LETTER]=handle_LETTER,
+        [DIGIT]=handle_DIGIT,
+        [DIGDOT]=handle_DIGDOT,
+        [DOT]=handle_DOT,
+        [PLUS]=handle_PLUS,
+        [MINUS]=handle_MINUS,
+        [STAR]=handle_STAR,
     }
 
     -- ***** Iterator Function *****
