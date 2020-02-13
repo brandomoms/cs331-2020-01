@@ -1,4 +1,4 @@
--- rdparser2.lua  UNFINISHED
+-- rdparser2.lua
 -- Glenn G. Chappell
 -- 2020-02-12
 --
@@ -165,13 +165,32 @@ end
 -- Function init must be called before this function is called.
 function parse_thing()
     if matchCat(lexer.ID) then
-        -- We would construct an AST here
+        -- while-loop from BRACES in the grammar
+        while matchString(",") or matchString(":") do
+            if not matchCat(lexer.ID) then
+                return false
+            end
+        end
         return true
     elseif matchString("%") then
-        -- We would construct an AST here
         return true
     else
-        return false
+        -- if-statement from BRACKETS in the grammar
+        if matchString("*") then
+            if not matchString("-") then
+                return false
+            end
+        end
+        if not matchString("[") then
+            return false
+        end
+        if not parse_item() then
+            return false
+        end
+        if not matchString("]") then
+            return false
+        end
+        return true
     end
 end
 
