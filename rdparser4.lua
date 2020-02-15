@@ -1,4 +1,4 @@
--- rdparser4.lua  UNFINISHED
+-- rdparser4.lua
 -- Glenn G. Chappell
 -- 2020-02-14
 --
@@ -127,6 +127,8 @@ end
 
 -- "local" statements for parsing functions
 local parse_expr
+local parse_term
+local parse_factor
 
 -- parse
 -- Given program, initialize parser and call parsing function for start
@@ -166,8 +168,85 @@ end
 -- Parsing function for nonterminal "expr".
 -- Function init must be called before this function is called.
 function parse_expr()
-    io.write("***** FUNCTION parse_expr NEEDS TO BE WRITTEN!!!\n")
-    return false, nil
+    local good, ast, saveop, newast
+
+    good, ast = parse_term()
+    if not good then
+        return false, nil
+    end
+
+    while true do
+        saveop = lexstr
+        if not matchString("+") and not matchString("-") then
+            break
+        end
+
+        good, newast = parse_term()
+        if not good then
+            return false, nil
+        end
+
+        ast = { { BIN_OP, saveop }, ast, newast }
+    end
+
+    return true, ast
+end
+
+
+-- parse_term
+-- Parsing function for nonterminal "term".
+-- Function init must be called before this function is called.
+function parse_term()
+    local good, ast, saveop, newast
+
+    good, ast = parse_factor()
+    if not good then
+        return false, nil
+    end
+
+    while true do
+        saveop = lexstr
+        if not matchString("*") and not matchString("/") then
+            break
+        end
+
+        good, newast = parse_factor()
+        if not good then
+            return false, nil
+        end
+
+        ast = { { BIN_OP, saveop }, ast, newast }
+    end
+
+    return true, ast
+end
+
+
+-- parse_factor
+-- Parsing function for nonterminal "factor".
+-- Function init must be called before this function is called.
+function parse_factor()
+    local savelex, good, ast
+
+    savelex = lexstr
+    if matchCat(lexer.ID) then
+        return true, { SIMPLE_VAR, savelex }
+    elseif matchCat(lexer.NUMLIT) then
+        return true, { NUMLIT_VAL, savelex }
+    elseif matchString("(") then
+        good, ast = parse_expr()
+        if not good then
+            return false, nil
+        end
+
+        if not matchString(")") then
+            return false, nil
+        end
+
+        return true, ast
+    else
+        return false, nil
+    end
 end
 
 
