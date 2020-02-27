@@ -13,7 +13,7 @@ import System.IO  -- for hFlush, stdout
 main = do
     putStrLn ""
     putStrLn "This file contains sample code from February 24, 2020,"
-    putStrLn "for the topic \"Haskell: Lists\n."
+    putStrLn "for the topic \"Haskell: Lists\"."
     putStrLn "It will execute, but it is not intended to do anything"
     putStrLn "useful. See the source."
     putStrLn ""
