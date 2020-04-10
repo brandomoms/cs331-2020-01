@@ -169,7 +169,6 @@ end
 -- Return Value:
 --   state, updated with changed variable values
 function interpit.interp(ast, state, incall, outcall)
-    print(astToStr(ast))
     print("Function 'interp' needs to be written!!!")
     return state
 end
