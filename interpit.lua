@@ -1,6 +1,6 @@
 -- interpit.lua  INCOMPLETE
 -- Glenn G. Chappell
--- 2020-04-09
+-- 2020-04-10
 --
 -- For CS F331 / CSCE A331 Spring 2020
 -- Interpret AST from parseit.parse
@@ -169,7 +169,86 @@ end
 -- Return Value:
 --   state, updated with changed variable values
 function interpit.interp(ast, state, incall, outcall)
-    print("Function 'interp' needs to be written!!!")
+    -- Each local interpretation function is given the AST for the
+    -- portion of the code it is interpreting. The function-wide
+    -- versions of state, incall, and outcall may be used. The
+    -- function-wide version of state may be modified as appropriate.
+
+
+    -- Forward declare local functions
+    local interp_stmt_list
+    local handle_backslash_escapes
+    local interp_stmt
+    local eval_expr
+
+
+    -- interp_stmt_list
+    -- Execute a statement list, given its AST.
+    function interp_stmt_list(ast)
+        for i = 2, #ast do
+            interp_stmt(ast[i])
+        end
+    end
+
+
+    -- handle_backslash_escapes
+    -- Given a string possibly containing backslash escapes,
+    -- returns a string with each replaced by the correct character.
+    function handle_backslash_escapes(instr)
+        -- WRITE THIS!!!
+        local outstr = instr  -- WRONG!!!
+        return outstr
+    end
+
+
+    -- interp_stmt
+    -- Execute a statement, given its AST.
+    function interp_stmt(ast)
+        if ast[1] == PRINT_STMT then
+            for i = 2, #ast do
+                if ast[i][1] == STRLIT_OUT then
+                    local str = ast[i][2]
+                    outcall(handle_backslash_escapes(
+                             str:sub(2,str:len()-1)))
+                elseif ast[i][1] == CHAR_CALL then
+                    print("CHAR_CALL HANDLING NOT WRITTEN!!!")
+                else
+                    local value = eval_expr(ast[i])
+                    outcall(numToStr(value))
+                end
+            end
+        elseif ast[1] == FUNC_DEF then
+            local funcname = ast[2]
+            local funcbody = ast[3]
+            state.f[funcname] = funcbody
+        elseif ast[1] == FUNC_CALL then
+            local funcname = ast[2]
+            local funcbody = state.f[funcname]
+            if funcbody == nil then
+                funcbody = { STMT_LIST }
+            end
+            interp_stmt_list(funcbody)
+        else
+            print("THIS KIND OF STATEMENT NOT HANDLED YET!!!")
+        end
+    end
+
+
+    -- eval_expr
+    -- Evaluate an expression, given its AST. The return value is the
+    -- value of the expression.
+    function eval_expr(ast)
+        if ast[1] == NUMLIT_VAL then
+            return strToNum(ast[2])
+        else
+            print("THIS KIND OF EXPRESSION NOT HANDLED YET!!!")
+            return 42  -- DUMMY!!!
+        end
+    end
+
+
+    -- Body of function interp
+    interp_stmt_list(ast)
     return state
 end
 
