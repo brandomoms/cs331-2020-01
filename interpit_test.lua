@@ -1,7 +1,9 @@
 #!/usr/bin/env lua
 -- interpit_test.lua
+-- VERSION 2
 -- Glenn G. Chappell
--- 2020-10-13
+-- Started: 2020-04-13
+-- Updated: 2020-04-15
 --
 -- For CS F331 / CSCE A331 Spring 2020
 -- Test Program for Module interpit
@@ -1024,25 +1026,35 @@ function test_expr(t)
     checkInterp(t, ast, input, statein, expoutput, expstateout,
       "Print unary -")
 
-    -- Print ! #1
+    -- Print not #1
     ast = {STMTxLIST, {PRINTxSTMT,
-      {{UNxOP, "!"}, {NUMLITxVAL, "5"}}}}
+      {{UNxOP, "not"}, {NUMLITxVAL, "5"}}}}
     input = {}
     statein = deepcopy(emptystate)
     expoutput = {"0"}
     expstateout = deepcopy(statein)
     checkInterp(t, ast, input, statein, expoutput, expstateout,
-      "Print ! #1")
+      "Print not #1")
 
-    -- Print ! #2
+    -- Print not #2
     ast = {STMTxLIST, {PRINTxSTMT,
-      {{UNxOP, "!"}, {NUMLITxVAL, "0"}}}}
+      {{UNxOP, "not"}, {NUMLITxVAL, "0"}}}}
     input = {}
     statein = deepcopy(emptystate)
     expoutput = {"1"}
     expstateout = deepcopy(statein)
     checkInterp(t, ast, input, statein, expoutput, expstateout,
-      "Print ! #2")
+      "Print not #2")
+
+    -- Print not not
+    ast = {STMTxLIST, {PRINTxSTMT,
+      {{UNxOP, "not"},{{UNxOP, "not"}, {NUMLITxVAL, "0"}}}}}
+    input = {}
+    statein = deepcopy(emptystate)
+    expoutput = {"0"}
+    expstateout = deepcopy(statein)
+    checkInterp(t, ast, input, statein, expoutput, expstateout,
+      "Print not not")
 
     -- Print binary +
     ast = {STMTxLIST, {PRINTxSTMT,
