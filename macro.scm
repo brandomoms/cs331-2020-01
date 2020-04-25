@@ -161,7 +161,28 @@
 
 ; Try:
 ;   (def12 a (+ 1 2) b (+ 2 3))
+;   a
 ;   b
+
+; defbunch
+; Define an arbitrary number of identifiers.
+(define-syntax defbunch
+  (syntax-rules ()
+    [(def12)
+     (void)
+     ]
+    [(defbunch v1 e1 . rest)
+     (begin
+       (define v1 e1)
+       (defbunch . rest)
+       )
+     ]
+    )
+  )
+
+; Try:
+;   (defbunch a 1 b 2 c (+ 3 3))
+;   c
 
 
 ; ***** Keywords in Macros *****
