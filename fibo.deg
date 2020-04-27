@@ -1,0 +1,43 @@
+#!./degu.lua
+# fibo.deg
+# Glenn G. Chappell
+# 2020-02-06
+#
+# For CS F331 / CSCE A331 Spring 2020
+# Compute Fibonacci Numbers
+
+
+# The Fibonacci number F(n), for n >= 0, is defined by F(0) = 0,
+# F(1) = 1, and for n >= 2, F(n) = F(n-2) + F(n-1).
+
+
+# fibo
+# Parameter is in variable n. Return Fibonacci number F(n).
+func fibo()
+    curr_fibo = 0
+    next_fibo = 1
+    i = 0  # Loop counter
+    while i < n
+        # Advance (curr_fibo, next_fibo)
+        tmp = curr_fibo + next_fibo
+        curr_fibo = next_fibo
+        next_fibo = tmp
+        i = i+1
+    end
+    return curr_fibo
+end
+
+
+# Main program
+# Print some Fibonacci numbers
+how_many_to_print = 20
+
+print("Fibonacci Numbers\n")
+
+j = 0  # Loop counter
+while j < how_many_to_print
+    n = j  # Set parameter for fibo
+    print("F(",j,") = ",fibo(),"\n")
+    j = j+1
+end
+

@@ -1,0 +1,11 @@
+#!./degu.lua
+# hello.deg
+# Glenn G. Chappell
+# 2020-04-27
+#
+# For CS F331 / CSCE A331 Spring 2020
+# Degu Example: Hello World
+
+
+print("Hello, world!\n")
+
